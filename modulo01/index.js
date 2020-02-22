@@ -3,6 +3,7 @@ const express = require("express");
 const server = express();
 
 //query params = ?teste=1
+//query params = ?teste=1
 //route params = /users/1
 //request body = {"name": "Alan", "email": "teste@teste.com.br"}
 
