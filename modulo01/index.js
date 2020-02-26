@@ -2,6 +2,7 @@ const express = require("express");
 
 const server = express();
 
+server.use(express.json());
 //query params = ?teste=1
 //query params = ?teste=1
 //route params = /users/1
@@ -24,9 +25,38 @@ server.get("/routeParams/:id", (req, res) => {
 
 const user = ["Souza", "Alan", "Vitor"];
 
+server.get("/users", (req, res) => {
+  return res.json(user);
+});
+
 server.get("/users/:index", (req, res) => {
   const { index } = req.params;
   return res.json(user[index]);
+});
+
+server.post("/users", (req, res) => {
+  const { name } = req.body;
+
+  user.push(name);
+
+  res.json(user);
+});
+
+server.put("/users/:index", (req, res) => {
+  const { index } = req.params;
+  const { name } = req.body;
+
+  user[index] = name;
+
+  return res.json(user);
+});
+
+server.delete("/users/:index", (req, res) => {
+  const { index } = req.params;
+
+  user.splice(index, 1);
+
+  return res.send();
 });
 
 //node index.js
