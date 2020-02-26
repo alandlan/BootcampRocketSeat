@@ -22,7 +22,7 @@ server.get("/routeParams/:id", (req, res) => {
   return res.json({ message: `Buscando o Id: ${id}` });
 });
 
-const user = ["Diego", "Alan", "Vitor"];
+const user = ["Souza", "Alan", "Vitor"];
 
 server.get("/users/:index", (req, res) => {
   const { index } = req.params;
@@ -30,4 +30,9 @@ server.get("/users/:index", (req, res) => {
 });
 
 //node index.js
+//yarn nodemon index.js
+//yarn dev
 server.listen(3000);
+
+//yarn add nodemon -D (adiciona o pacote de atualização do projeto em tempo
+//de desenvolvimento. -D somente em dev)
