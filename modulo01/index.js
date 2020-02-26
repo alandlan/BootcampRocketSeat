@@ -22,4 +22,12 @@ server.get("/routeParams/:id", (req, res) => {
   return res.json({ message: `Buscando o Id: ${id}` });
 });
 
+const user = ["Diego", "Alan", "Vitor"];
+
+server.get("/users/:index", (req, res) => {
+  const { index } = req.params;
+  return res.json(user[index]);
+});
+
+//node index.js
 server.listen(3000);
