@@ -8,6 +8,33 @@ server.use(express.json());
 //route params = /users/1
 //request body = {"name": "Alan", "email": "teste@teste.com.br"}
 
+//middleware -- sempre quando é chamado uma rota passa por aqui
+server.use((req, res, next) => {
+  //faz alguma coisa
+  console.time("Request");
+  console.log(`Método: ${req.method}; URL: ${req.url};`);
+
+  //return next(); //vai para a rota
+  next();
+  console.timeEnd("Finalizou");
+});
+
+function checkUserExists(req, res, next) {
+  if (!req.body.name) {
+    return res.status(400).json({ error: "User name is required" });
+  }
+
+  return next();
+}
+
+function checkUserInArray(req, res, next) {
+  if (!users[req.params.index]) {
+    return res, status(400).json({ error: "User does not exists" });
+  }
+
+  return next();
+}
+
 //res é a resposta que eu vou dar para a requisição
 server.get("/queryParams", (req, res) => {
   //recupera o nome na query params
@@ -16,7 +43,7 @@ server.get("/queryParams", (req, res) => {
   return res.json({ message: `Hello ${nome}` });
 });
 
-server.get("/routeParams/:id", (req, res) => {
+server.get("/routeParams/:id", checkUserInArray, (req, res) => {
   //recupera o id no route params
   const { id } = req.params;
 
@@ -29,12 +56,12 @@ server.get("/users", (req, res) => {
   return res.json(user);
 });
 
-server.get("/users/:index", (req, res) => {
+server.get("/users/:index", checkUserInArray, (req, res) => {
   const { index } = req.params;
   return res.json(user[index]);
 });
 
-server.post("/users", (req, res) => {
+server.post("/users", checkUserExists, (req, res) => {
   const { name } = req.body;
 
   user.push(name);
@@ -42,7 +69,7 @@ server.post("/users", (req, res) => {
   res.json(user);
 });
 
-server.put("/users/:index", (req, res) => {
+server.put("/users/:index", checkUserExists, checkUserInArray, (req, res) => {
   const { index } = req.params;
   const { name } = req.body;
 
@@ -51,7 +78,7 @@ server.put("/users/:index", (req, res) => {
   return res.json(user);
 });
 
-server.delete("/users/:index", (req, res) => {
+server.delete("/users/:index", checkUserInArray, (req, res) => {
   const { index } = req.params;
 
   user.splice(index, 1);
